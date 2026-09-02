@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 10, 15;
+  --background-end-rgb: 20, 5, 10;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: radial-gradient(circle at 50% 20%, #200d16 0%, #0c0b12 60%, #050508 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Hazard Tape Strip */
+.hazard-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffea00,
+    #ffea00 15px,
+    #111111 15px,
+    #111111 30px
+  );
+}
+
+.hazard-stripes-red {
+  background: repeating-linear-gradient(
+    -45deg,
+    #ff1744,
+    #ff1744 15px,
+    #180005 15px,
+    #180005 30px
+  );
+}
+
+/* Screen Shake Effect */
+@keyframes violentShake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-2px, -3px) rotate(-1deg); }
+  20% { transform: translate(-4px, 0px) rotate(1deg); }
+  30% { transform: translate(4px, 3px) rotate(0deg); }
+  40% { transform: translate(2px, -2px) rotate(1deg); }
+  50% { transform: translate(-2px, 3px) rotate(-1deg); }
+  60% { transform: translate(-4px, 1px) rotate(0deg); }
+  70% { transform: translate(4px, 2px) rotate(-1deg); }
+  80% { transform: translate(-2px, -2px) rotate(1deg); }
+  90% { transform: translate(2px, 3px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+.shake-active {
+  animation: violentShake 0.18s ease-in-out infinite;
+}
+
+/* Siren Glow / Emergency Flash */
+@keyframes sirenRedGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(255, 23, 68, 0.8), inset 0 0 15px rgba(255, 23, 68, 0.4);
+    border-color: #ff1744;
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(255, 23, 68, 1), 0 0 80px rgba(255, 234, 0, 0.6), inset 0 0 30px rgba(255, 23, 68, 0.8);
+    border-color: #ffea00;
+  }
+}
+
+.siren-box {
+  animation: sirenRedGlow 0.6s ease-in-out infinite alternate;
+}
+
+/* Sound wave rings */
+@keyframes rippleWave {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.sound-ring-1 {
+  animation: rippleWave 1.2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.sound-ring-2 {
+  animation: rippleWave 1.2s cubic-bezier(0, 0.2, 0.8, 1) 0.4s infinite;
+}
+.sound-ring-3 {
+  animation: rippleWave 1.2s cubic-bezier(0, 0.2, 0.8, 1) 0.8s infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0f14;
+}
+::-webkit-scrollbar-thumb {
+  background: #33394a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff1744;
+}
