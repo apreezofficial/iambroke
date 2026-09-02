@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { playSapaAlarm, screamText } from '@/lib/soundEffects';
+import React from 'react';
 
 interface BrokeLine {
   id: string;
@@ -31,15 +30,6 @@ const BROKE_LIST: BrokeLine[] = [
 ];
 
 export default function Home() {
-  const [playingId, setPlayingId] = useState<string | null>(null);
-
-  const scream = (item: BrokeLine) => {
-    setPlayingId(item.id);
-    playSapaAlarm(0.7);
-    screamText(item.text, { pitch: 1.4, rate: 1.2 });
-    setTimeout(() => setPlayingId(null), 1200);
-  };
-
   return (
     <main className="min-h-screen bg-black text-white px-4 py-10 max-w-4xl mx-auto font-sans">
       <div className="border-b border-zinc-800 pb-5 mb-6">
@@ -52,10 +42,7 @@ export default function Home() {
         {BROKE_LIST.map((item) => (
           <div
             key={item.id}
-            onClick={() => scream(item)}
-            className={`py-3.5 px-3 cursor-pointer transition-colors rounded-lg flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 ${
-              playingId === item.id ? 'bg-red-950/80 text-yellow-300' : 'hover:bg-zinc-900/70'
-            }`}
+            className="py-3.5 px-3 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 hover:bg-zinc-900/40 rounded-lg transition-colors"
           >
             <span className="text-xs sm:text-sm font-bold text-red-400 sm:w-44 flex-shrink-0 uppercase tracking-wide">
               {item.language}
