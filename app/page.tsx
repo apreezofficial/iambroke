@@ -1,140 +1,100 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BROKE_PHRASES, BrokePhrase } from '@/lib/phrases';
-import ScreamerHero from '@/components/ScreamerHero';
-import LanguageGrid from '@/components/LanguageGrid';
-import SapaMeter from '@/components/SapaMeter';
-import Urgent2kGenerator from '@/components/Urgent2kGenerator';
-import EmptyBankAlert from '@/components/EmptyBankAlert';
-import GarriCalculator from '@/components/GarriCalculator';
-import { Megaphone, AlertOctagon, Heart, Share2, Sparkles } from 'lucide-react';
+import { playSapaAlarm, screamText } from '@/lib/soundEffects';
+import { Volume2 } from 'lucide-react';
+
+interface BrokeLine {
+  id: string;
+  language: string;
+  flag: string;
+  text: string;
+}
+
+const BROKE_LIST: BrokeLine[] = [
+  // Nigerian
+  { id: '1', language: 'Nigerian Pidgin', flag: '🇳🇬', text: 'I don broke die, abeg I need money!' },
+  { id: '2', language: 'Nigerian Pidgin (Sapa)', flag: '🇳🇬', text: 'Sapa dey choke me, make una send me money abeg!' },
+  { id: '3', language: 'Yoruba', flag: '🇳🇬', text: 'Kò sí owó lọ́wọ́ mi, mo nílò owó jọ̀wọ́!' },
+  { id: '4', language: 'Yoruba (Ẹgbà mi)', flag: '🇳🇬', text: 'Mo ti broke patapata, ẹgbà mi ẹ bùn mi lówó!' },
+  { id: '5', language: 'Igbo', flag: '🇳🇬', text: 'Ègó adíghị m, biko m chọrọ ego!' },
+  { id: '6', language: 'Igbo (Distress)', flag: '🇳🇬', text: 'Ègó agwụ́la m n\'aka, biko nye m ego!' },
+  { id: '7', language: 'Hausa', flag: '🇳🇬', text: 'Ba ni da kudi, don Allah ina bukatar kudi!' },
+  { id: '8', language: 'Hausa (Wallahi)', flag: '🇳🇬', text: 'Ba kudi wallahi, don Allah ku taimake ni da kudi!' },
+  { id: '9', language: 'Edo (Bini)', flag: '🇳🇬', text: 'I ma mwẹn igho, biko I gualọ igho!' },
+  { id: '10', language: 'Efik / Ibibio', flag: '🇳🇬', text: 'Mmenyeneke okuk, mbok mmoyom okuk!' },
+  { id: '11', language: 'Tiv', flag: '🇳🇬', text: 'M ngu a inyaregh ga, m soo inyaregh zungwe!' },
+
+  // World
+  { id: '12', language: 'English', flag: '🇬🇧', text: 'I am broke, I need money please!' },
+  { id: '13', language: 'French', flag: '🇫🇷', text: 'Je suis fauché, j\'ai besoin d\'argent s\'il vous plaît !' },
+  { id: '14', language: 'Spanish', flag: '🇪🇸', text: '¡Estoy quebrado, necesito dinero por favor!' },
+  { id: '15', language: 'German', flag: '🇩🇪', text: 'Ich bin pleite, ich brauche bitte Geld!' },
+  { id: '16', language: 'Italian', flag: '🇮🇹', text: 'Sono al verde, ho bisogno di soldi per favore!' },
+  { id: '17', language: 'Portuguese', flag: '🇧🇷', text: 'Estou quebrado, preciso de dinheiro por favor!' },
+  { id: '18', language: 'Swahili', flag: '🇰🇪', text: 'Sina pesa kabisa, ninahitaji pesa tafadhali!' },
+  { id: '19', language: 'Arabic', flag: '🇸🇦', text: 'أَنَا مُفْلِس، أَحْتَاجُ إِلَى نُقُود مِنْ فَضْلِك!' },
+  { id: '20', language: 'Japanese', flag: '🇯🇵', text: 'お金がありません、お金をください、お願いします！' },
+  { id: '21', language: 'Korean', flag: '🇰🇷', text: '나 완전 거지야, 제발 돈 좀 줘!' },
+  { id: '22', language: 'Chinese (Mandarin)', flag: '🇨🇳', text: '我破产了，拜托请给我钱！' },
+  { id: '23', language: 'Russian', flag: '🇷🇺', text: 'Я на меле, пожалуйста, мне нужны деньги!' },
+];
 
 export default function Home() {
-  const [activePhrase, setActivePhrase] = useState<BrokePhrase>(BROKE_PHRASES[0]);
-  const [isShaking, setIsShaking] = useState<boolean>(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+
+  const scream = (item: BrokeLine) => {
+    setPlayingId(item.id);
+    playSapaAlarm(0.7);
+    screamText(item.text, { pitch: 1.4, rate: 1.2 });
+    setTimeout(() => setPlayingId(null), 1200);
+  };
 
   return (
-    <div className={`min-h-screen text-white flex flex-col transition-all duration-75 ${isShaking ? 'shake-active' : ''}`}>
-      {/* Top Ticker / Marquee */}
-      <div className="bg-yellow-400 text-black py-1.5 px-4 overflow-hidden whitespace-nowrap font-mono font-black text-xs uppercase tracking-wider flex items-center border-b border-black">
-        <div className="flex animate-marquee gap-8">
-          <span>🚨 RED ALERT: NAIJA SAPA INDEX REACHES CRITICAL RECORD</span>
-          <span>•</span>
-          <span>📢 OFFICIAL ADVICE: RESIST CHECKING ACCOUNT BALANCE TODAY</span>
-          <span>•</span>
-          <span>🥣 CASHEW NUT IS NOT FOR BROKE BOYS: STICK TO SOAKED GARRI</span>
-          <span>•</span>
-          <span>💸 URGENT 2K IS A BASIC HUMAN RIGHT</span>
-          <span>•</span>
-          <span>🚨 RED ALERT: NAIJA SAPA INDEX REACHES CRITICAL RECORD</span>
-          <span>•</span>
-          <span>📢 OFFICIAL ADVICE: RESIST CHECKING ACCOUNT BALANCE TODAY</span>
-          <span>•</span>
-          <span>🥣 CASHEW NUT IS NOT FOR BROKE BOYS: STICK TO SOAKED GARRI</span>
-          <span>•</span>
-          <span>💸 URGENT 2K IS A BASIC HUMAN RIGHT</span>
-        </div>
+    <main className="min-h-screen bg-black text-white px-4 py-8 max-w-4xl mx-auto font-sans">
+      <div className="border-b border-zinc-800 pb-6 mb-6">
+        <h1 className="text-2xl sm:text-4xl font-black text-yellow-400 uppercase tracking-tight">
+          📢 I AM BROKE, I NEED MONEY PLEASE
+        </h1>
+        <p className="text-zinc-400 text-sm mt-1">
+          Click any sentence below to scream it out loud.
+        </p>
       </div>
 
-      {/* Header / Navbar */}
-      <header className="border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 to-rose-700 flex items-center justify-center shadow-lg shadow-red-600/40 animate-pulse">
-              <Megaphone className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-black text-lg sm:text-xl tracking-tight text-white">
-                  SAPA<span className="text-red-500">911</span>
-                </span>
-                <span className="bg-red-600/30 border border-red-500/50 text-[10px] font-black text-red-400 px-2 py-0.5 rounded-full uppercase">
-                  Naija Screamer
+      <div className="divide-y divide-zinc-800/80">
+        {BROKE_LIST.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => scream(item)}
+            className={`py-4 px-3 flex items-center justify-between cursor-pointer transition-colors ${
+              playingId === item.id ? 'bg-red-950/60 text-yellow-300' : 'hover:bg-zinc-900/80'
+            }`}
+          >
+            <div className="pr-4">
+              <div className="flex items-center gap-2 mb-1">
+                <span>{item.flag}</span>
+                <span className="text-xs font-bold text-red-400 uppercase tracking-wider">
+                  {item.language}
                 </span>
               </div>
-              <p className="text-[11px] text-zinc-400 -mt-0.5">
-                Multi-lingual Emergency Broke Screamer
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 bg-zinc-900 border border-zinc-800 px-3 py-1.5 rounded-full text-xs text-zinc-400">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-              <span>Sapa Threat: <strong className="text-yellow-400">MAXIMUM</strong></span>
+              <div className="text-base sm:text-xl font-bold">
+                &ldquo;{item.text}&rdquo;
+              </div>
             </div>
 
             <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'SAPA 911 | I Am Broke Screamer',
-                    text: 'Come and hear me scream that I am broke in Yoruba, Igbo, Hausa and Pidgin! 😭💸',
-                    url: window.location.href,
-                  });
-                } else {
-                  navigator.clipboard.writeText(window.location.href);
-                  alert('Sapa emergency link copied to clipboard!');
-                }
+              onClick={(e) => {
+                e.stopPropagation();
+                scream(item);
               }}
-              className="p-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors border border-zinc-700"
-              title="Share this app"
+              className="p-2.5 rounded-lg bg-zinc-800 hover:bg-red-600 text-zinc-300 hover:text-white transition-colors flex-shrink-0"
+              title="Scream"
             >
-              <Share2 className="w-4 h-4" />
+              <Volume2 className="w-4 h-4" />
             </button>
           </div>
-        </div>
-      </header>
-
-      {/* Main Content Area */}
-      <main className="flex-1 pb-16">
-        {/* Hero Section with Interactive Megaphone */}
-        <ScreamerHero
-          activePhrase={activePhrase}
-          setActivePhrase={setActivePhrase}
-          isShaking={isShaking}
-          setIsShaking={setIsShaking}
-        />
-
-        {/* Soundboard Archive */}
-        <LanguageGrid
-          onSelectPhrase={(phrase) => {
-            setActivePhrase(phrase);
-            window.scrollTo({ top: 120, behavior: 'smooth' });
-          }}
-          activePhraseId={activePhrase.id}
-        />
-
-        {/* Sapa-Meter Diagnostic */}
-        <SapaMeter />
-
-        {/* Urgent 2K Generator */}
-        <Urgent2kGenerator />
-
-        {/* Empty Parody Bank Card */}
-        <EmptyBankAlert />
-
-        {/* Garri Survival Calculator */}
-        <GarriCalculator />
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-zinc-900 bg-black/80 py-10 px-4 text-center text-xs text-zinc-500">
-        <div className="max-w-4xl mx-auto space-y-3">
-          <p className="font-medium text-zinc-400">
-            Dedicated to all warriors surviving on Garri, cold water, pure hope, and urgent 2k miracles. 🥣🇳🇬
-          </p>
-          <p className="text-[11px] text-zinc-600">
-            Disclaimer: No Central Bank governors or commercial banks were harmed. Purely built for comedic relief and stress ventilation.
-          </p>
-          <div className="pt-2 flex justify-center items-center gap-1 text-[11px] text-zinc-500">
-            <span>Built with excessive screams & Naija humor</span>
-            <Heart className="w-3 h-3 text-red-500 inline fill-red-500" />
-            <span>• 2026</span>
-          </div>
-        </div>
-      </footer>
-    </div>
+        ))}
+      </div>
+    </main>
   );
 }
