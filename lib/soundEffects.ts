@@ -1,6 +1,6 @@
 // Audio completely disabled
-export function playSapaAlarm() {}
-export function playEmptyCashSound() {}
-export function playWahalaBoom() {}
-export function playVuvuzelaHorn() {}
-export function screamText() {}
+export function playSapaAlarm(..._args: any[]) {}
+export function playEmptyCashSound(..._args: any[]) {}
+export function playWahalaBoom(..._args: any[]) {}
+export function playVuvuzelaHorn(..._args: any[]) {}
+export function screamText(..._args: any[]) {}
